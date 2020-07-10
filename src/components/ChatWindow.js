@@ -29,6 +29,15 @@ export default function ChatWindow() {
     };
   }, []);
 
+  //start-up load
+  useEffect(() => {
+    socket.on("welcome", (messages) => {
+      //the "receive" must be the same name as the back-end
+      setMessages(messages);
+    });
+    return () => socket.off("welcome");
+  }, [messages]);
+
   useEffect(() => {
     socket.on("receive", (message) => {
       //the "receive" must be the same name as the back-end
@@ -58,7 +67,7 @@ export default function ChatWindow() {
       <h1>Hello World</h1>
       <ul>
         {messages.map((message) => (
-          <li>{message}</li>
+          <li>{message.body}</li>
         ))}
       </ul>
       <form onSubmit={handleFormSubmit}>
